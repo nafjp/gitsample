@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registered Recipes</title>
+</head>
+<body>
+    <h1>Registered Recipes</h1>
+
+    <div>
+        Sort by:
+        <a href="{{ url_for('list_recipes_view', sort_by='name') }}">名前順</a> |
+        <a href="{{ url_for('list_recipes_view', sort_by='cost_asc') }}">原価の安い順</a> |
+        <a href="{{ url_for('list_recipes_view', sort_by='cost_desc') }}">原価の高い順</a> |
+        <a href="{{ url_for('list_recipes_view') }}">登録順 (リセット)</a>
+    </div>
+    <hr>
+
+    {% if recipes %}
+        <ul>
+            {% for recipe in recipes %}
+                <li>
+                    {{ recipe.recipe_name }}
+                    - 原価: {{ "%.2f"|format(recipe.calculated_cost) }}円
+                    - 原価率: {{ recipe.cost_rate }}
+                    <br>
+                    {% if recipe.image_filename %}
+                        <img src="{{ url_for('static', filename='uploads/' + recipe.image_filename) }}" alt="{{ recipe.recipe_name }}" width="100">
+                    {% else %}
+                        <p style="display: inline-block; margin-left: 10px;">(画像なし)</p>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>まだレシピが登録されていません。</p>
+    {% endif %}
+    <p><a href="{{ url_for('index') }}">Go back to Home</a></p>
+    <p><a href="{{ url_for('register_form') }}">Register another recipe</a></p>
+</body>
+</html>
